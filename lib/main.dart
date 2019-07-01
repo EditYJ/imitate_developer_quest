@@ -12,9 +12,11 @@ void main() {
 
   var world = World();
   providers.provideValue(world);
+
   // Provider specific parts of the world separetely that
   // only care about quests, for example, can only listen to those
   providers.provideValue(world.quests);
+  providers.provideValue(world.teams);
 
   runApp(ProviderNode(child: MyApp(), providers: providers));
 }

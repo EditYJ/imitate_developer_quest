@@ -1,16 +1,38 @@
-import 'dart:math';
+import 'package:imitate_developer_quest/src/shared_state/game/team.dart';
 
-final _random = Random();
-
-// A single task for the player and her team to complete
+/// A single task for the player and her team to complete
 class Quest {
   final String name;
-  double percentComplete = 0;
+  int _percentComplete = 0;
+
+  /// The quest has changed since the last time [update] was called
+  bool _isDirty = false;
+
+  Team _assignedTeam;
+
   Quest(this.name);
 
-  void update() {
-    if (percentComplete == 1) return;
-    percentComplete += _random.nextDouble() / 100;
-    if (percentComplete > 1) percentComplete = 1;
+  Team get assignedTeam => _assignedTeam;
+  double get percentComplete => _percentComplete / 100;
+
+  void makeProgress(int percent) {
+    assert(percent >= 0);
+    if (percent == 0) return;
+    if (_percentComplete == 100) return;
+    _percentComplete += percent;
+    if (_percentComplete > 100) _percentComplete = 100;
+    _isDirty = true;
+  }
+
+  bool update() {
+    var wasDirty = _isDirty;
+    _isDirty = false;
+    return wasDirty;
+  }
+
+  /// 为任务分配队伍
+  void assignTeam(Team team) {
+    _assignedTeam = team;
+    _isDirty = true;
   }
 }
