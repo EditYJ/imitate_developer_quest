@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:imitate_developer_quest/src/shared_state/game/src/aspect.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/team.dart';
 
-class Teams extends ChangeNotifier{
+class Teams extends Aspect{
   final List<Team> _list = [
     Team('Flutter DevRel Team'),
   ];
@@ -13,12 +14,13 @@ class Teams extends ChangeNotifier{
   @deprecated
   Team get single =>_list.single;
 
-  void updateAll(){
+  void update(){
     for(var team in _list){
       team.update();
     }
 
     // the teams list currently doesn't get changed, ever. So we don't call
     // notifyListeners here
+    super.update();
   }
 }

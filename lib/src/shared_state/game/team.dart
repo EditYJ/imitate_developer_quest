@@ -1,16 +1,15 @@
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/quest.dart';
+import 'package:imitate_developer_quest/src/shared_state/game/src/aspect.dart';
 
 final _random = Random();
 
 /// A ragtag bunch of misfits that do all the work.
-class Team extends ChangeNotifier{
+class Team extends Aspect{
   /// The task that this team is currently working on, if any.
   Quest _assignedTo;
   final String name;
-  bool _isDirty = false;
 
   Team(this.name);
 
@@ -22,20 +21,17 @@ class Team extends ChangeNotifier{
 
     _assignedTo = quest;
     quest.assignTeam(this);
-    _isDirty = true;
+    markDirty();
   }
 
   @override
   String toString() =>name;
 
   void update(){
-    if(_isDirty){
-      notifyListeners();
-      _isDirty = false;
-    }
     if(_assignedTo == null) return;
 
     var progress = _random.nextInt(maxHit);
     _assignedTo.makeProgress(progress);
+    super.update();
   }
 }
