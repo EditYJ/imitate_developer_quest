@@ -30,8 +30,12 @@ class Team extends Aspect{
 
   void update(){
     if(_assignedTo == null) return;
-
-    var progress = _random.nextInt(maxHit);
+    var progress;
+    if(_assignedTo.isBlocked){
+      progress = _random.nextInt(2);
+    }else{
+      progress = _random.nextInt(maxHit);
+    }
     _assignedTo.makeProgress(progress);
     super.update();
   }
