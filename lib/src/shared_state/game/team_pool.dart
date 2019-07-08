@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/src/aspect.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/team.dart';
 
+// 当前所有团队的集合
 class TeamPool extends Aspect{
   final List<Team> _list = [
     Team('Flutter DevRel Team'),

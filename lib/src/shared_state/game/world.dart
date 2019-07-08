@@ -9,7 +9,7 @@ import 'package:imitate_developer_quest/src/shared_state/game/team_pool.dart';
 /// The state of the world.
 ///
 /// Widgets should subscribe to aspects of the world (such as [taskPool])
-/// instead of this whole world unless they really care about every change.
+/// instead of this whole world, unless they really care about every change.
 class World extends Aspect {
   static final tickDuration = const Duration(milliseconds: 200);
 
@@ -19,17 +19,26 @@ class World extends Aspect {
   final TeamPool teamPool;
   final CountdownClock countdown;
 
+  bool _isRunning = false;
+
   World()
       : taskPool = TaskPool(),
         teamPool = TeamPool(),
         countdown = CountdownClock();
 
+  /// 当模拟正常运行的时候返回`true`
+  bool get isRunning =>_isRunning;
+
   void pause() {
     _timer.cancel();
+    _isRunning = false;
+    markDirty();
   }
 
   void start() {
     _timer = Timer.periodic(tickDuration, _performTick);
+    _isRunning = true;
+    markDirty();
   }
 
   void update() {

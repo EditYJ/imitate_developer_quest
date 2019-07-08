@@ -1,12 +1,13 @@
 import 'dart:math';
 
-import 'package:imitate_developer_quest/src/shared_state/game/quest.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/src/aspect.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/task.dart';
 
 final _random = Random();
 
 /// A ragtag bunch of misfits that do all the work.
+///
+/// 当[_assignedTo]不为空的时候，队伍将会在每次[update]推进[Task]进度。
 class Team extends Aspect{
   /// The task that this team is currently working on, if any.
   Task _assignedTo;

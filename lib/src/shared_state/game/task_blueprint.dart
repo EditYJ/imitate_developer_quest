@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 
 /// 任务计划
 ///
-/// This is immutable(不可变的)
+/// 这个类是不可变的[immutable],在任务[Task]中添加运行时状态
 @immutable
 class TaskBlueprint{
   final String name;
