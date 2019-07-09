@@ -1,8 +1,12 @@
+import 'dart:collection';
+import 'dart:math';
+
 import 'package:imitate_developer_quest/src/shared_state/game/blocking_issue.dart';
+import 'package:imitate_developer_quest/src/shared_state/game/npc.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/src/aspect.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/task_blueprint.dart';
-import 'package:imitate_developer_quest/src/shared_state/game/team.dart';
 
+final _random = Random();
 /// 障碍问题状态{无，展示，已解决，未解决}
 enum BlockingIssueState { none, shown, resolved, unresolved }
 
@@ -18,7 +22,7 @@ class Task extends Aspect{
 
   BlockingIssueState _blockingIssueState = BlockingIssueState.none;
 
-  Team _assignedTeam;
+  List<Npc> _assignedTeam;
 
   Task(this.blueprint){
     UnimplementedError();
@@ -29,14 +33,18 @@ class Task extends Aspect{
   Task.sample(String name):
       blueprint = TaskBlueprint(name, 100, BlockingIssue.sample());
 
-  Team get assignedTeam=>_assignedTeam;
+  // [UnmodifiableListView]或[UnmodifiableMapView]返回一个不可修改的List或Map
+  UnmodifiableListView<Npc> get assignedTeam=> _assignedTeam ==null?null:UnmodifiableListView(_assignedTeam);
 
   bool get isBlocked => _blockingIssueState == BlockingIssueState.shown;
 
+  int get maxHit=>(_assignedTeam?.length??0)+1;
+
   double get percentComplete => _percentComplete /100;
 
-  void assignTeam(Team team){
-    _assignedTeam = team;
+  void assignTeam(Iterable<Npc> team){
+    _assignedTeam = team.toList(growable: false);
+    _assignedTeam.forEach((npc)=>npc.isBusy = true);
     markDirty();
   }
 
@@ -44,7 +52,7 @@ class Task extends Aspect{
   ///
   /// 任务会在拦路的缺陷问题该出现的进度处[BlockingIssue.startAtProcessLevel]
   /// 改变[isBlocked]的值
-  void makeProgress(int percent){
+  void _makeProcess(int percent){
     assert(percent >= 0);
     if(percent == 0) return;
     if(_percentComplete == 100)return;
@@ -56,8 +64,10 @@ class Task extends Aspect{
     if(_percentComplete > 100){
       _percentComplete = 100;
       if(_blockingIssueState != BlockingIssueState.resolved){
-        _blockingIssueState = BlockingIssueState.resolved;
+        _blockingIssueState = BlockingIssueState.unresolved;
       }
+      _assignedTeam.forEach((npc)=>npc.isBusy = false);
+      _assignedTeam = null;
     }
     markDirty();
   }
@@ -69,6 +79,15 @@ class Task extends Aspect{
         _blockingIssueState = BlockingIssueState.unresolved;
         markDirty();
       }
+    }
+    if(_assignedTeam!=null){
+      int progress;
+      if(isBlocked){
+        progress = _random.nextInt(2);
+      }else{
+        progress = _random.nextInt(maxHit);
+      }
+      _makeProcess(progress);
     }
     super.update();
   }

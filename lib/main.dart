@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:imitate_developer_quest/src/gameloop_screen.dart';
+import 'package:imitate_developer_quest/src/game_screen.dart';
 
 import 'package:imitate_developer_quest/src/shared_state/provider.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/world.dart';
@@ -16,7 +16,7 @@ void main() {
   // Provider specific parts of the world separetely that
   // only care about quests, for example, can only listen to those
   providers.provideValue(world.taskPool);
-  providers.provideValue(world.teamPool);
+  providers.provideValue(world.npcPool);
   providers.provideValue(world.countdown);
 
   runApp(ProviderNode(child: MyApp(), providers: providers));
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         "/":(context)=>WelcomeScreen(),
-        "/gameloop": (context)=>GameloopScreen(),
+        "/gameloop": (context)=>GameScreen(),
       },
     );
   }

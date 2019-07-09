@@ -39,7 +39,7 @@ class TaskPool extends Aspect with ListMixin<Task>{
   void update(){
     for(final task in this){
       task.update();
-      if(task.isDirty) markDirty();
+//      if(task.isDirty) markDirty();
     }
     super.update();
   }
