@@ -16,7 +16,8 @@ class _GameScreenState extends State<GameScreen> {
   int _index = 0;
   final _controller = PageController();
 
-  GameScreenState() {
+  @override
+  void initState() {
     _controller.addListener(() {
       if (_controller.page.round() != _index) {
         setState(() {
@@ -24,6 +25,7 @@ class _GameScreenState extends State<GameScreen> {
         });
       }
     });
+    super.initState();
   }
 
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:imitate_developer_quest/src/gameloop_screen/list_item.dart';
+import 'package:imitate_developer_quest/src/game_screen/task_list_item.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/countdown_clock.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/task_pool.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/task.dart';

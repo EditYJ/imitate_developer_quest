@@ -36,8 +36,8 @@ class NpcListItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(npc.name),
-                Text(npc.isHired ? 'Hired' : 'Not hired'),
-                Text(npc.isBusy ? 'Busy' : 'Free')
+                Text(npc.isHired ? '被雇佣' : '可被雇佣'),
+                Text(npc.isBusy ? '忙碌' : '闲置')
               ],
             ),
           ),
