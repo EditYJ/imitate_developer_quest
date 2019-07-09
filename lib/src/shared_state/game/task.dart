@@ -55,13 +55,12 @@ class Task extends Aspect{
   void _makeProcess(int percent){
     assert(percent >= 0);
     if(percent == 0) return;
-    if(_percentComplete == 100)return;
     _percentComplete +=percent;
     if(_blockingIssueStartTime == null && _percentComplete > blueprint.blockingIssue.startAtProcessLevel){
       _blockingIssueState = BlockingIssueState.shown;
       _blockingIssueStartTime =DateTime.now().toUtc();
     }
-    if(_percentComplete > 100){
+    if(_percentComplete >= 100){
       _percentComplete = 100;
       if(_blockingIssueState != BlockingIssueState.resolved){
         _blockingIssueState = BlockingIssueState.unresolved;

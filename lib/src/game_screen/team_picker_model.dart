@@ -46,6 +46,7 @@ class _TeamPickerModalState extends State<TeamPickerModal> {
                                   _selected.add(npc);
                                 } else {
                                   _selected.remove(npc);
+                                  npc.isBusy=false;
                                 }
                               }),
                           cells: [DataCell(Text(npc.name))]))
