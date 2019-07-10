@@ -32,14 +32,20 @@ class NpcListItem extends StatelessWidget {
         return Card(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
               children: <Widget>[
-                Text(npc.name),
-                Text(npc.isHired ? '被雇佣' : '可被雇佣'),
-                Text(npc.isBusy ? '忙碌' : '闲置')
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(npc.name),
+                    Text(npc.isHired ? '被雇佣' : '可被雇佣'),
+                    Text(npc.isBusy ? '忙碌' : '闲置')
+                  ],
+                ),
+                SizedBox(height: 5),
+                p
               ],
-            ),
+            )
           ),
         );
       },
