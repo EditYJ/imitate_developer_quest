@@ -1,4 +1,5 @@
 import 'package:imitate_developer_quest/src/shared_state/game/blocking_issue.dart';
+import 'package:imitate_developer_quest/src/shared_state/game/skill.dart';
 import 'package:meta/meta.dart';
 
 /// 任务计划
@@ -7,8 +8,15 @@ import 'package:meta/meta.dart';
 @immutable
 class TaskBlueprint{
   final String name;
-  final int xpReward;
-  final BlockingIssue blockingIssue;
+  final Map<Skill, double> difficlty;
 
-  const TaskBlueprint(this.name,this.xpReward,this.blockingIssue);
+  List<Skill> get requirements{
+    List<Skill> skills = [];
+    difficlty.forEach((Skill skill, double amount){
+      skills.add(skill);
+    });
+    return skills;
+  }
+
+  const TaskBlueprint(this.name,this.difficlty);
 }

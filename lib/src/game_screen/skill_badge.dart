@@ -16,9 +16,25 @@ Map<Skill, Color> skillColor = {
 };
 
 class SkillBadge extends StatelessWidget {
+  final Skill skill;
+  final double value;
+
+  SkillBadge(this.skill, [this.value]);
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return null;
+    return Padding(
+      padding: const EdgeInsets.only(right: 5.0),
+      child: Container(
+        padding: EdgeInsets.all(5.0),
+        decoration: BoxDecoration(
+            color: skillColor[skill],
+            borderRadius: BorderRadius.all(Radius.circular(5.0))),
+        child: Text(
+          skillDisplayName[skill] + (value != null ? "(${value.round()})" : ""),
+          style: TextStyle(fontSize: 10.0, color: Colors.white),
+        ),
+      ),
+    );
   }
 }

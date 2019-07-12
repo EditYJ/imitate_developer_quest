@@ -7,8 +7,8 @@ import 'package:imitate_developer_quest/src/shared_state/provider.dart';
 class TaskListItem extends StatelessWidget {
   TaskListItem({Key key}) : super(key: key);
 
-  void _onAssigned(Task task,Set<Npc> value){
-    if(value == null || value.isEmpty) return;
+  void _onAssigned(Task task, Set<Npc> value) {
+    if (value == null || value.isEmpty) return;
     task.assignTeam(value);
   }
 
@@ -52,5 +52,4 @@ class TaskListItem extends StatelessWidget {
           ),
     );
   }
-
 }

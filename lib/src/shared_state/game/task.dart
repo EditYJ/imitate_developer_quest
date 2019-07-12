@@ -1,8 +1,9 @@
 import 'dart:collection';
 import 'dart:math';
 
-import 'package:imitate_developer_quest/src/shared_state/game/blocking_issue.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/npc.dart';
+import 'package:imitate_developer_quest/src/shared_state/game/project.dart';
+import 'package:imitate_developer_quest/src/shared_state/game/skill.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/src/aspect.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/task_blueprint.dart';
 
@@ -16,85 +17,62 @@ enum BlockingIssueState { none, shown, resolved, unresolved }
 class Task extends Aspect{
   final TaskBlueprint blueprint;
 
-  int _percentComplete = 0;
-
-  DateTime _blockingIssueStartTime;
-
-  BlockingIssueState _blockingIssueState = BlockingIssueState.none;
+  final Project project;
+  final Map<Skill, double> completion = {};
+  double boost = 1.0;
 
   List<Npc> _assignedTeam;
 
-  Task(this.blueprint){
-    UnimplementedError();
-  }
-
-  /// 用于创建任务的快捷方式
-  @Deprecated('请创建多样化任务，不只是名称上的不一样')
-  Task.sample(String name):
-      blueprint = TaskBlueprint(name, 100, BlockingIssue.sample());
+  Task(this.project,this.blueprint);
 
   // [UnmodifiableListView]或[UnmodifiableMapView]返回一个不可修改的List或Map
-  UnmodifiableListView<Npc> get assignedTeam=> _assignedTeam ==null?null:UnmodifiableListView(_assignedTeam);
+  UnmodifiableListView<Npc> get assignedTeam => _assignedTeam == null?null:UnmodifiableListView(_assignedTeam);
 
-  bool get isBlocked => _blockingIssueState == BlockingIssueState.shown;
+  /// 得到此任务的进度
+  double get percentComplete{
+    double required = 0.0;
+    double completed = 0.0;
+    // 累计所需技能和每项技能的完成量
+    blueprint.difficlty.forEach((Skill skill, double amount){
+      required+=amount;
+      completed+=min(amount, completion[skill]??0.0);
+    });
+    return completed/required;
+  }
 
-  int get maxHit=>(_assignedTeam?.length??0)+1;
-
-  double get percentComplete => _percentComplete /100;
 
   void assignTeam(Iterable<Npc> team){
+    if(project.state != ProjectState.Started){
+      return;
+    }
     _assignedTeam = team.toList(growable: false);
     _assignedTeam.forEach((npc)=>npc.isBusy = true);
     markDirty();
   }
 
-  /// 用百分比[percent]表示进度。
-  ///
-  /// 任务会在拦路的缺陷问题该出现的进度处[BlockingIssue.startAtProcessLevel]
-  /// 改变[isBlocked]的值
-  void _makeProcess(int percent){
-    assert(percent >= 0);
-    if(percent == 0) return;
-    _percentComplete +=percent;
-    if(_blockingIssueStartTime == null && _percentComplete > blueprint.blockingIssue.startAtProcessLevel){
-      _blockingIssueState = BlockingIssueState.shown;
-      _blockingIssueStartTime =DateTime.now().toUtc();
+  /// 解除队伍中npc的忙碌状态
+  void freeTeam(){
+    if(_assignedTeam == null){
+      return;
     }
-    if(_percentComplete >= 100){
-      _percentComplete = 100;
-      if(_blockingIssueState != BlockingIssueState.resolved){
-        _blockingIssueState = BlockingIssueState.unresolved;
-      }
-      _assignedTeam.forEach((npc)=>npc.isBusy = false);
-      _assignedTeam = null;
-    }
-    markDirty();
+    _assignedTeam.forEach((npc)=>npc.isBusy = false);
+    _assignedTeam = null;
   }
 
   void update(){
-    if(_blockingIssueState == BlockingIssueState.shown){
-      var blockingIssueEnd = _blockingIssueStartTime.add(blueprint.blockingIssue.duration);
-      if(blockingIssueEnd.isBefore(DateTime.now())){
-        _blockingIssueState = BlockingIssueState.unresolved;
-        markDirty();
-      }
-    }
     if(_assignedTeam!=null){
-      int progress;
-      if(isBlocked){
-        progress = _random.nextInt(2);
-      }else{
-        progress = _random.nextInt(maxHit);
+      for(Npc npc in _assignedTeam){
+        npc.prowess.forEach((Skill skill, double amount){
+          completion[skill] = (completion[skill]??0.0)+amount*boost;
+        });
       }
-      _makeProcess(progress);
+      boost = 1.0;
+      if(percentComplete >= 1.0 || project.state != ProjectState.Started){
+        // 如果工作人员都做完了 就解放他们
+        freeTeam();
+      }
+      markDirty();
     }
     super.update();
-  }
-
-  /// Resolves the blocking issue.
-  void resolveIssue(){
-    assert(_blockingIssueState == BlockingIssueState.shown);
-    _blockingIssueState = BlockingIssueState.resolved;
-    markDirty();
   }
 }

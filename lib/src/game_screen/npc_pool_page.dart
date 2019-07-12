@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imitate_developer_quest/src/game_screen/prowess_badge.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/npc.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/npc_pool.dart';
 import 'package:imitate_developer_quest/src/shared_state/provider.dart';
@@ -43,7 +44,8 @@ class NpcListItem extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 5),
-                p
+                ProwessBadge(npc.prowess),
+                SizedBox(height: 10.0)
               ],
             )
           ),
