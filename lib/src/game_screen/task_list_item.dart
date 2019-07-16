@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:imitate_developer_quest/src/game_screen/skill_badge.dart';
 import 'package:imitate_developer_quest/src/game_screen/team_picker_model.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/npc.dart';
+import 'package:imitate_developer_quest/src/shared_state/game/skill.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/task.dart';
 import 'package:imitate_developer_quest/src/shared_state/provider.dart';
 
@@ -15,41 +17,48 @@ class TaskListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provide<Task>(
-      builder: (context, child, task) => Card(
-            margin: EdgeInsets.all(8),
-            child: InkWell(
-              onTap: () => showModalBottomSheet<Set<Npc>>(
-                    context: context,
-                    builder: (context) => TeamPickerModal(task),
-                  ).then((npcs) => _onAssigned(task, npcs)),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(height: 20),
-                  Text(
-                    task.blueprint.name,
-                    style: Theme.of(context).textTheme.title,
+        builder: (context, child, task) => Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Card(
+                child: InkWell(
+                  onTap: () => showModalBottomSheet<Set<Npc>>(
+                        context: context,
+                        builder: (context) => TeamPickerModal(task),
+                      ).then((npcs) => _onAssigned(task, npcs)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          children: <Widget>[
+                            Text(task.blueprint.name, style: TextStyle(fontSize: 14)),
+                            Expanded(
+                              child: Wrap(
+                                alignment: WrapAlignment.end,
+                                children: task.blueprint.requirements.map((Skill skill)=>SkillBadge(skill)).toList(),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: LinearProgressIndicator(value: task.percentComplete),
+                      ),
+                      task.assignedTeam == null?SizedBox():Container(
+                        height: 100.0,
+                          color: Colors.deepOrange,child: InkWell(
+                        onTap: ()=>task.boost +=2.5,
+                        child: Text("Team Pic Goes Here... assigned to: ${task.assignedTeam}.Tap to boost."),
+                      ),
+                      )
+                    ],
                   ),
-                  SizedBox(height: 10),
-                  task.isBlocked
-                      ? MaterialButton(
-                          onPressed: () => task.resolveIssue(),
-                          color: Colors.red,
-                          child: Row(
-                            children: <Widget>[
-                              Icon(Icons.warning),
-                              Text('BLOCKING ISSUE')
-                            ],
-                          ),
-                        )
-                      : SizedBox(),
-                  SizedBox(height: 10),
-                  LinearProgressIndicator(
-                    value: task.percentComplete,
-                  )
-                ],
+                ),
               ),
-            ),
-          ),
-    );
+            ));
   }
 }
