@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:imitate_developer_quest/src/game_screen/npc_pool_page.dart';
 import 'package:imitate_developer_quest/src/game_screen/stats_page.dart';
-import 'package:imitate_developer_quest/src/game_screen/task_pool_page.dart';
+import 'package:imitate_developer_quest/src/game_screen/project_page.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/countdown_clock.dart';
 import 'package:imitate_developer_quest/src/shared_state/provider.dart';
 
