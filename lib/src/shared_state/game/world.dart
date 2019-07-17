@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:imitate_developer_quest/src/shared_state/game/countdown_clock.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/npc_pool.dart';
+import 'package:imitate_developer_quest/src/shared_state/game/project_pool.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/src/aspect.dart';
 
 /// The state of the world.
@@ -13,19 +14,17 @@ class World extends Aspect {
 
   Timer _timer;
 
-  final TaskPool taskPool;
+  final ProjectPool projectPool;
   final NpcPool npcPool;
-  final CountdownClock countdown;
 
   bool _isRunning = false;
 
   World()
-      :npcPool = NpcPool(),
-  projectPool = ProjectPool()
-
+      : npcPool = NpcPool(),
+        projectPool = ProjectPool();
 
   /// 当模拟正常运行的时候返回`true`
-  bool get isRunning =>_isRunning;
+  bool get isRunning => _isRunning;
 
   void pause() {
     _timer.cancel();
@@ -40,13 +39,12 @@ class World extends Aspect {
   }
 
   void update() {
-    taskPool.update();
     npcPool.update();
-    countdown.update();
+    projectPool.update();
     super.update();
   }
 
-  void _performTick(Timer timer){
+  void _performTick(Timer timer) {
     update();
   }
 }

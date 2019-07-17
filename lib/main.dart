@@ -15,9 +15,8 @@ void main() {
 
   // Provider specific parts of the world separetely that
   // only care about quests, for example, can only listen to those
-  providers.provideValue(world.taskPool);
+  providers.provideValue(world.projectPool);
   providers.provideValue(world.npcPool);
-  providers.provideValue(world.countdown);
 
   runApp(ProviderNode(child: MyApp(), providers: providers));
 }

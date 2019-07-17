@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imitate_developer_quest/src/game_screen/npc_pool_page.dart';
+import 'package:imitate_developer_quest/src/game_screen/project_pool_page.dart';
 import 'package:imitate_developer_quest/src/game_screen/stats_page.dart';
 import 'package:imitate_developer_quest/src/game_screen/project_page.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/countdown_clock.dart';
@@ -31,12 +32,6 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Provide<CountdownClock>(
-          builder: (context, child, countdown) =>
-              Text("${countdown.remainingTime.inSeconds}s"),
-        ),
-      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
         onTap: (index) => setState(() {
@@ -50,7 +45,7 @@ class _GameScreenState extends State<GameScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.work),
-            title: Text('Tasks'),
+            title: Text('Projects'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.timeline),
@@ -62,7 +57,7 @@ class _GameScreenState extends State<GameScreen> {
         controller: _controller,
         children: <Widget>[
           NpcPoolPage(),
-          TaskPoolPage(),
+          ProjectPoolPage(),
           StatsPage()
         ],
       ),
