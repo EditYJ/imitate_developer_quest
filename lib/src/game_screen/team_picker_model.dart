@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imitate_developer_quest/src/game_screen/prowess_badge.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/npc.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/npc_pool.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/task.dart';
@@ -40,16 +41,25 @@ class _TeamPickerModalState extends State<TeamPickerModal> {
                           npc.isHired &&
                           (!npc.isBusy || _selected.contains(npc)))
                       .map((npc) => DataRow(
-                          selected: _selected.contains(npc),
-                          onSelectChanged: (selected) => setState(() {
-                                if (selected) {
-                                  _selected.add(npc);
-                                } else {
-                                  _selected.remove(npc);
-                                  npc.isBusy=false;
-                                }
-                              }),
-                          cells: [DataCell(Text(npc.name))]))
+                              selected: _selected.contains(npc),
+                              onSelectChanged: (selected) => setState(() {
+                                    if (selected) {
+                                      _selected.add(npc);
+                                    } else {
+                                      _selected.remove(npc);
+                                      npc.isBusy = false;
+                                    }
+                                  }),
+                              cells: [
+                                DataCell(Row(
+                                  children: <Widget>[
+                                    Text(npc.name),
+                                    Expanded(
+                                      child: ProwessBadge(npc.prowess),
+                                    )
+                                  ],
+                                ))
+                              ]))
                       .toList(growable: false),
                 );
               },

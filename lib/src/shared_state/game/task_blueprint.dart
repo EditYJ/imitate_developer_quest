@@ -1,4 +1,3 @@
-import 'package:imitate_developer_quest/src/shared_state/game/blocking_issue.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/skill.dart';
 import 'package:meta/meta.dart';
 

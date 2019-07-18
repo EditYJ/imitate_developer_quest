@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:imitate_developer_quest/src/shared_state/game/countdown_clock.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/npc_pool.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/project_pool.dart';
 import 'package:imitate_developer_quest/src/shared_state/game/src/aspect.dart';

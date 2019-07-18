@@ -30,20 +30,20 @@ class Project extends Aspect {
           0.0, (double value, Task task) => value + task.percentComplete) /
       tasks.length;
 
-  double get percentTimeLeft => tickRemaining/totalTicks;
+  double get percentTimeLeft => tickRemaining / totalTicks;
 
   ProjectState get state => isComplete
       ? ProjectState.Complete
-      : percentTimeLeft >0.0?ProjectState.Started: ProjectState.Failed;
+      : percentTimeLeft > 0.0 ? ProjectState.Started : ProjectState.Failed;
 
   @override
   void update() {
     super.update();
 
     // 项目开始了吗？
-    if(tickRemaining != null && tickRemaining>0){
+    if (tickRemaining != null && tickRemaining > 0) {
       tickRemaining--;
-      for(Task task in tasks){
+      for (Task task in tasks) {
         task.update();
       }
       markDirty();
